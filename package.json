@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "next build",
+    "build:docker": "docker build -t sorry-ui .",
     "check": "next lint && tsc --noEmit",
     "dev": "next dev --turbo",
     "lint": "next lint",
