@@ -12,12 +12,31 @@ export async function POST(req: NextRequest) {
   try {
     const data: {reasons: ApologyReason[]} = await req.json();
     
+    // Get IP address
+    const forwardedFor = req.headers.get('x-forwarded-for');
+    const ip = forwardedFor ? forwardedFor.split(',')[0] : req.headers.get('x-real-ip');
+    
+    // Get user agent
+    const userAgent = req.headers.get('user-agent') || 'unknown';
+    
+    // Create a basic browser fingerprint
+    const fingerprint = {
+      userAgent,
+      language: req.headers.get('accept-language'),
+      platform: req.headers.get('sec-ch-ua-platform'),
+      mobile: req.headers.get('sec-ch-ua-mobile'),
+      vendor: req.headers.get('sec-ch-ua-vendor'),
+    };
+    
     // Save acceptance data to Supabase
     const { error } = await supabase
       .from('apology_acceptances')
       .insert({
         reasons: data.reasons.map((reason) => reason.text).join('|'),
-        accepted_at: new Date().toISOString()
+        accepted_at: new Date().toISOString(),
+        ip_address: ip,
+        user_agent: userAgent,
+        browser_fingerprint: fingerprint
       });
 
     if (error) {
