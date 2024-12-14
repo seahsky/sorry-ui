@@ -1,4 +1,4 @@
-import ApologyForm from "~/components/ApologyForm";
+import ApologyForm from "@/components/ApologyForm";
 
 export default function ApologyPage() {
   return (
