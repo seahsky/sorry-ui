@@ -4,20 +4,20 @@ import { ApologyReason } from "../../../../models/ApologyReason";
 
 // Initialize Supabase client
 const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL || '',
-  process.env.SUPABASE_SERVICE_ROLE_KEY || ''
+  process.env.NEXT_PUBLIC_SUPABASE_URL ?? '',
+  process.env.SUPABASE_SERVICE_ROLE_KEY ?? ''
 );
 
 export async function POST(req: NextRequest) {
   try {
-    const data: {reasons: ApologyReason[]} = await req.json();
+    const data = await req.json() as { reasons: ApologyReason[] };
     
     // Get IP address
     const forwardedFor = req.headers.get('x-forwarded-for');
     const ip = forwardedFor ? forwardedFor.split(',')[0] : req.headers.get('x-real-ip');
     
     // Get user agent
-    const userAgent = req.headers.get('user-agent') || 'unknown';
+    const userAgent = req.headers.get('user-agent') ?? 'unknown';
     
     // Create a basic browser fingerprint
     const fingerprint = {

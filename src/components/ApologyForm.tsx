@@ -16,6 +16,7 @@ const ApologyForm: FC<ApologyFormProps> = ({ imageUrl }) => {
   const [confirmationLevel, setConfirmationLevel] = useState(0);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [showVolumeWarning, setShowVolumeWarning] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleAddReason = () => {
     const text = prompt("Enter new apology reason:");
@@ -26,6 +27,7 @@ const ApologyForm: FC<ApologyFormProps> = ({ imageUrl }) => {
 
   const handleAcceptApology = async () => {
     const checkedReasons = reasons.filter((reason) => reason.checked);
+    setIsLoading(true);
     
     try {
       const response = await fetch("/api/apology/accept", {
@@ -43,7 +45,8 @@ const ApologyForm: FC<ApologyFormProps> = ({ imageUrl }) => {
       setIsPopupOpen(true);
     } catch (error) {
       console.error("Error accepting apology:", error);
-      // Optionally show an error message to the user
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -70,6 +73,14 @@ const ApologyForm: FC<ApologyFormProps> = ({ imageUrl }) => {
 
   return (
     <div className="mx-auto max-w-2xl p-4">
+      {isLoading && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="flex flex-col items-center space-y-2">
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-500 border-t-transparent"></div>
+            <p className="text-white">處理中...</p>
+          </div>
+        </div>
+      )}
       {showVolumeWarning && (
         <div className="fixed inset-x-0 top-4 z-50 mx-auto max-w-md">
           <div className="mx-4 rounded-lg bg-yellow-100 p-4 shadow-lg">

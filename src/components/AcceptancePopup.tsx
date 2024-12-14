@@ -10,8 +10,12 @@ const AcceptancePopup: FC<AcceptancePopupProps> = ({ isOpen, onClose }) => {
 
   useEffect(() => {
     if (isOpen) {
-      const timer = setTimeout(() => {
-        audioRef.current?.play();
+      const timer = setTimeout(async () => {
+        try {
+          await audioRef.current?.play();
+        } catch (error) {
+          console.error('Failed to play audio:', error);
+        }
       }, 500);
       return () => clearTimeout(timer);
     } else {
