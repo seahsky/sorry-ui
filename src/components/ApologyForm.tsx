@@ -131,7 +131,7 @@ const ApologyForm: FC<ApologyFormProps> = ({ imageUrl }) => {
                 <span className="font-semibold">道歉人：</span>謝凱宇
               </p>
               <p>
-                <span className="font-semibold">日��：</span>2024-12-12
+                <span className="font-semibold">日期：</span>2024-12-12
               </p>
             </div>
             <p className="font-semibold">道歉原因：</p>
