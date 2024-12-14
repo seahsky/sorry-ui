@@ -1,5 +1,6 @@
 import { type NextRequest } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import { ApologyReason } from "../../../../models/ApologyReason";
 
 // Initialize Supabase client
 const supabase = createClient(
@@ -9,14 +10,13 @@ const supabase = createClient(
 
 export async function POST(req: NextRequest) {
   try {
-    const data = await req.json();
+    const data: ApologyReason[] = await req.json();
     
     // Save acceptance data to Supabase
     const { error } = await supabase
       .from('apology_acceptances')
       .insert({
-        apology_id: data.apologyId,
-        reasons: data.reasons,
+        reasons: data.map((reason) => reason.text).join('|'),
         accepted_at: new Date().toISOString()
       });
 

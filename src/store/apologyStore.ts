@@ -1,10 +1,5 @@
 import { create } from "zustand";
-
-interface ApologyReason {
-  id: string;
-  text: string;
-  checked: boolean;
-}
+import { ApologyReason } from "../models/ApologyReason";
 
 interface ApologyStore {
   reasons: ApologyReason[];
