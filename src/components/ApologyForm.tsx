@@ -4,6 +4,7 @@ import { type FC, useState } from "react";
 import ApologyReason from "./ApologyReason";
 import { useApologyStore } from "@/store/apologyStore";
 import AcceptancePopup from "./AcceptancePopup";
+import ConfirmationPopup from "./ConfirmationPopup";
 
 interface ApologyFormProps {
   imageUrl: string;
@@ -12,6 +13,8 @@ interface ApologyFormProps {
 const ApologyForm: FC<ApologyFormProps> = ({ imageUrl }) => {
   const { reasons, addReason, toggleReason, deleteReason } = useApologyStore();
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [confirmationLevel, setConfirmationLevel] = useState(0);
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   const handleAddReason = () => {
     const text = prompt("Enter new apology reason:");
@@ -44,7 +47,20 @@ const ApologyForm: FC<ApologyFormProps> = ({ imageUrl }) => {
   };
 
   const handleRejectApology = () => {
-    console.log("Apology rejected");
+    setShowConfirmation(true);
+  };
+
+  const handleConfirmReject = () => {
+    if (confirmationLevel < 4) {
+      setConfirmationLevel((prev) => prev + 1);
+    } else {
+      setConfirmationLevel(0);
+    }
+  };
+
+  const handleCancelReject = () => {
+    setShowConfirmation(false);
+    setConfirmationLevel(0);
   };
 
   return (
@@ -52,6 +68,12 @@ const ApologyForm: FC<ApologyFormProps> = ({ imageUrl }) => {
       <AcceptancePopup 
         isOpen={isPopupOpen} 
         onClose={() => setIsPopupOpen(false)} 
+      />
+      <ConfirmationPopup
+        isOpen={showConfirmation}
+        level={confirmationLevel}
+        onConfirm={handleConfirmReject}
+        onCancel={handleCancelReject}
       />
       <div className="mb-8 flex flex-col items-center space-y-4">
         {/* Image and Title Section */}
@@ -71,7 +93,7 @@ const ApologyForm: FC<ApologyFormProps> = ({ imageUrl }) => {
         <div className="w-full rounded-lg border border-gray-200 p-6 shadow-sm">
           {/* Header Information */}
           <div className="mb-6 space-y-2">
-            <div className="flex flex-wrap gap-x-8 gap-y-2">
+            <div className="flex flex-wrap justify-between mb-5">
               <p>
                 <span className="font-semibold">道歉人：</span>謝凱宇
               </p>
@@ -98,8 +120,8 @@ const ApologyForm: FC<ApologyFormProps> = ({ imageUrl }) => {
 
         {/* Footer Text */}
         <div className="text-center text-sm">
-          <p className="mb-2">本人 謝凱宇 在此向 葉幸竺 道歉</p>
-          <p>並保證未來開唱前會注意砲台有對準正確目標 避免誤傷情況再次發生</p>
+          <p className="mb-2">本人 <u>謝凱宇</u> 在此向 <u>葉幸竺</u> 道歉</p>
+          <p>並保證未來開嗆前會注意砲台有對準正確目標 避免誤傷情況再次發生</p>
         </div>
 
         {/* Buttons Section */}
@@ -108,19 +130,19 @@ const ApologyForm: FC<ApologyFormProps> = ({ imageUrl }) => {
             onClick={handleAddReason}
             className="w-full rounded-md bg-blue-500 px-4 py-2 text-white transition-colors hover:bg-blue-600 sm:w-auto"
           >
-            Add Apology Reason
+            新增罪名
           </button>
           <button
             onClick={handleAcceptApology}
             className="w-full rounded-md bg-green-500 px-4 py-2 text-white transition-colors hover:bg-green-600 sm:w-auto"
           >
-            Accept Apology
+            接受道歉
           </button>
           <button
             onClick={handleRejectApology}
             className="w-full rounded-md bg-red-500 px-4 py-2 text-white transition-colors hover:bg-red-600 sm:w-auto"
           >
-            Reject Apology
+            拒絕道歉
           </button>
         </div>
       </div>

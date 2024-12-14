@@ -4,19 +4,19 @@ import { ApologyReason } from "../../../../models/ApologyReason";
 
 // Initialize Supabase client
 const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
+  process.env.NEXT_PUBLIC_SUPABASE_URL || '',
+  process.env.SUPABASE_SERVICE_ROLE_KEY || ''
 );
 
 export async function POST(req: NextRequest) {
   try {
-    const data: ApologyReason[] = await req.json();
+    const data: {reasons: ApologyReason[]} = await req.json();
     
     // Save acceptance data to Supabase
     const { error } = await supabase
       .from('apology_acceptances')
       .insert({
-        reasons: data.map((reason) => reason.text).join('|'),
+        reasons: data.reasons.map((reason) => reason.text).join('|'),
         accepted_at: new Date().toISOString()
       });
 

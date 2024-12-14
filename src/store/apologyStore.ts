@@ -13,7 +13,7 @@ export const useApologyStore = create<ApologyStore>((set) => ({
     { id: "1", text: "我呼吸跑拍了", checked: false },
     { id: "2", text: "我沒有節操", checked: false },
     { id: "3", text: "我台語很雷", checked: false },
-    { id: "4", text: "我砲台沒裝好被嗆到她", checked: false },
+    { id: "4", text: "我砲台沒裝好誤嗆到她", checked: true },
     { id: "5", text: "我每天不知道在忙三小", checked: false },
     { id: "6", text: "我裙子不夠短沒有誠意", checked: false }
   ],
